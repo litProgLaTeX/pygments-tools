@@ -1,17 +1,18 @@
---- monkeyPatches.py.orig	2023-09-09 16:29:22.835954031 +0100
-+++ monkeyPatches.py	2023-09-09 16:29:22.835954031 +0100
-@@ -16,39 +16,57 @@
+--- monkeyPatches.py.orig	2023-09-09 16:31:48.827206880 +0100
++++ monkeyPatches.py	2023-09-09 16:42:27.185430220 +0100
+@@ -16,39 +16,58 @@
          statetokens = tokendefs[statestack[-1]]
          while 1:
              for rexmatch, action, new_state in statetokens:
 +                print("\n------")
++                print(f"lexer: {type(self).__name__}")
 +                print(f"state: {statestack[-1]}")
 +                if type(action) is _TokenType : print(action)
 +                print(yaml.dump(rexmatch).splitlines()[2])
 +                print(f"trying to match: [{text[pos:]}]")
                  m = rexmatch(text, pos)
                  if m:
-+                    print(f"  we have a match {m.group(0)}")
++                    print(f"He HAVE a match [{m.group(0)}]")
                      if action is not None:
 +                        print("We have an action")
                          if type(action) is _TokenType:

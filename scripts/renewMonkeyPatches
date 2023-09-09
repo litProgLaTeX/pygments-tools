@@ -2,5 +2,6 @@
 
 cd pygmentsTools
 
+mv monkeyPatches.patch monkeyPatches.patch.orig
 diff -Naur monkeyPatches.py.orig monkeyPatches.py \
   > monkeyPatches.patch
