@@ -1,0 +1,60 @@
+--- monkeyPatches.py.orig	2023-09-09 16:29:22.835954031 +0100
++++ monkeyPatches.py	2023-09-09 16:29:22.835954031 +0100
+@@ -16,39 +16,57 @@
+         statetokens = tokendefs[statestack[-1]]
+         while 1:
+             for rexmatch, action, new_state in statetokens:
++                print("\n------")
++                print(f"state: {statestack[-1]}")
++                if type(action) is _TokenType : print(action)
++                print(yaml.dump(rexmatch).splitlines()[2])
++                print(f"trying to match: [{text[pos:]}]")
+                 m = rexmatch(text, pos)
+                 if m:
++                    print(f"  we have a match {m.group(0)}")
+                     if action is not None:
++                        print("We have an action")
+                         if type(action) is _TokenType:
++                            print(f"  action: {action}")
+                             yield pos, action, m.group()
+                         else:
++                            print("  yield from an functional action")
+                             yield from action(self, m)
+                     pos = m.end()
+                     if new_state is not None:
+                         # state transition
++                        print(f"We have a new state (orig top of statestack {statestack[-1]})")
+                         if isinstance(new_state, tuple):
+                             for state in new_state:
++                                print(f"  new_state(tuple): {state}")
+                                 if state == '#pop':
++                                    print("  is #pop")
+                                     if len(statestack) > 1:
+                                         statestack.pop()
+                                 elif state == '#push':
++                                    print(f"  is #push")
+                                     statestack.append(statestack[-1])
+                                 else:
++                                    print(f"  is {state}")
+                                     statestack.append(state)
+                         elif isinstance(new_state, int):
+                             # pop, but keep at least one state on the stack
+                             # (random code leading to unexpected pops should
+                             # not allow exceptions)
++                            print(f"  new_state(int): {new_state}")
+                             if abs(new_state) >= len(statestack):
+                                 del statestack[1:]
+                             else:
+                                 del statestack[new_state:]
+                         elif new_state == '#push':
++                            print(f"  new_state: {new_state}")
+                             statestack.append(statestack[-1])
+                         else:
+                             assert False, "wrong state def: %r" % new_state
++                        print(f"Top of statestack: {statestack[-1]}")
+                         statetokens = tokendefs[statestack[-1]]
+                     break
++                else: print("We have no match...")
+             else:
+                 # We are here only if all state tokens have been considered
+                 # and there was not a match on any of them.

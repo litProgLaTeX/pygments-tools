@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd pygmentsTools
+
+diff -Naur monkeyPatches.py.orig monkeyPatches.py \
+  > monkeyPatches.patch

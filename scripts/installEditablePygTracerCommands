@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# This bash script uses the current working directory to create a simple
+# script to run the pygTracer commands anywhere in a user's
+# workspace.
+
+##########################################################################
+
+recordcmdScript=$(pwd)/.venv/bin/pygTracer
+
+cat << CMD_SCRIPT > $HOME/.local/bin/pygTracer
+#!/bin/sh
+
+# This shell script was created by the pygments-tools tool
+#       './scripts/installEditablePygTracerCommands'
+# script.
+
+exec $recordcmdScript \$@
+CMD_SCRIPT
+
+chmod a+x $HOME/.local/bin/pygTracer
+
+##########################################################################
+
+echo ""
+echo "Editable pygTracer command has been created"
+echo ""

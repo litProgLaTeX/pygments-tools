@@ -1,0 +1,30 @@
+#!.venv/bin/python
+
+# Extract the 
+#   pygments.lexers.markup.RegexLexer.get_tokens_unprocessed,
+#   pygments.lexers.markup.using
+# source code so we can patch it.
+
+import inspect
+import os
+
+import pygments.lexers.markup
+
+getTokensStr = inspect.getsource(
+  pygments.lexers.markup.RegexLexer.get_tokens_unprocessed
+)
+
+getTokensStr = """
+import yaml
+from pygments.token import Whitespace, _TokenType
+
+class MonkeyPatchesMixin :
+
+""" + getTokensStr
+
+with open('pygmentsTools/monkeyPatches.py.orig', 'w') as codeFile :
+  codeFile.write(getTokensStr)
+
+os.chdir("pygmentsTools")
+os.system("cp monkeyPatches.py.orig monkeyPatches.py")
+os.system("patch monkeyPatches.py < monkeyPatches.patch")
