@@ -1,6 +1,6 @@
 --- monkeyPatches.py.orig	2023-09-09 16:31:48.827206880 +0100
-+++ monkeyPatches.py	2023-09-09 16:42:27.185430220 +0100
-@@ -16,39 +16,58 @@
++++ monkeyPatches.py	2023-09-09 17:14:49.720677146 +0100
+@@ -16,42 +16,62 @@
          statetokens = tokendefs[statestack[-1]]
          while 1:
              for rexmatch, action, new_state in statetokens:
@@ -59,3 +59,17 @@
              else:
                  # We are here only if all state tokens have been considered
                  # and there was not a match on any of them.
++                print("We have run out of tokens to try!")
+                 try:
+                     if text[pos] == '\n':
+                         # at EOL, reset state to "root"
+@@ -60,7 +80,9 @@
+                         yield pos, Whitespace, '\n'
+                         pos += 1
+                         continue
++                    print("Moving on by one character")
+                     yield pos, Error, text[pos]
+                     pos += 1
+                 except IndexError:
++                    print("We are FINISHED with this lexer")
+                     break
