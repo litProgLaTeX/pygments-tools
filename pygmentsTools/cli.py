@@ -36,9 +36,9 @@ def usage() :
   sys.exit(1)
 
 def cli() :
-  if len(sys.argv) < 3 :
-    usage()
-
+  if len(sys.argv) < 3 : usage()
+  if -1 < sys.argv[1].find('-h') : usage()
+  
   lexerName    = sys.argv[1]
   codeFilePath = sys.argv[2]
 
